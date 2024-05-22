@@ -1,0 +1,112 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+
+namespace ALLENIA
+{
+    public partial class Login : Form
+    {
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn
+        (
+            int nLeftRect,     // x-coordinate of upper-left corner
+            int nTopRect,      // y-coordinate of upper-left corner
+            int nRightRect,    // x-coordinate of lower-right corner
+            int nBottomRect,   // y-coordinate of lower-right corner
+            int nWidthEllipse, // width of ellipse
+            int nHeightEllipse // height of ellipse
+        );
+
+        public Login()
+        {
+            InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.None;
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+
+            usernameTxt.ForeColor = SystemColors.GrayText;
+            usernameTxt.Text = "Username";
+            this.usernameTxt.Leave += new System.EventHandler(this.usernameTxt_Leave);
+            this.usernameTxt.Enter += new System.EventHandler(this.usernameTxt_Enter);
+
+            passwordTxt.ForeColor = SystemColors.GrayText;
+            passwordTxt.Text = "Password";
+            this.passwordTxt.Leave += new System.EventHandler(this.passwordTxt_Leave);
+            this.passwordTxt.Enter += new System.EventHandler(this.passwordTxt_Enter);
+        }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            BringToFront();
+            TopMost = true;
+            loginBtn.Select();
+            loginBtn.Focus();
+        }
+
+        private void usernameTxt_Leave(object sender, EventArgs e)
+        {
+            if (usernameTxt.Text.Length == 0)
+            {
+                usernameTxt.Text = "Username";
+                usernameTxt.ForeColor = SystemColors.GrayText;
+            }
+        }
+
+        private void usernameTxt_Enter(object sender, EventArgs e)
+        {
+            if (usernameTxt.Text == "Username")
+            {
+                usernameTxt.Text = "";
+                usernameTxt.ForeColor = Color.White;
+            }
+        }
+
+        private void passwordTxt_Leave(object sender, EventArgs e)
+        {
+            if (passwordTxt.Text.Length == 0)
+            {
+                passwordTxt.Text = "Password";
+                passwordTxt.ForeColor = SystemColors.GrayText;
+            }
+        }
+
+        private void passwordTxt_Enter(object sender, EventArgs e)
+        {
+            if (passwordTxt.Text == "Password")
+            {
+                passwordTxt.Text = "";
+                passwordTxt.ForeColor = Color.White;
+            }
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void loginBtn_Click(object sender, EventArgs e)
+        {
+            passwordTxt.ReadOnly = true;
+            usernameTxt.ReadOnly = true;
+            usernameTxt.ForeColor= SystemColors.GrayText;
+            passwordTxt.ForeColor= SystemColors.GrayText;
+            loginBtn.ForeColor = SystemColors.GrayText;
+            string username = usernameTxt.Text;
+            string password = passwordTxt.Text;
+            label1.Text = "Please wait...";
+        }
+    }
+}
